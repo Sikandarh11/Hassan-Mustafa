@@ -14,7 +14,7 @@ CREATE TABLE public.profile (
   name TEXT NOT NULL DEFAULT 'Hafiz Muhammad Hassan Mustafa',
   tagline TEXT DEFAULT 'AI Engineer · ML Researcher · Full-Stack AI Systems',
   about_text TEXT,
-  photo_url TEXT,
+  photo_url TEXT DEFAULT '/hassan-mustafa.jpg',
   resume_url TEXT,
   phone TEXT,
   email TEXT,

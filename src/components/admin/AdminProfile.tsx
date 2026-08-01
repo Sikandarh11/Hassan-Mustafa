@@ -5,6 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Save, Upload, Plus, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import {
+  normalizePortfolioOwnerInitials,
+  normalizePortfolioOwnerName,
+  normalizePortfolioSiteTitle,
+  PORTFOLIO_OWNER_INITIALS,
+  PORTFOLIO_OWNER_NAME,
+  PORTFOLIO_OWNER_PHOTO,
+} from "@/lib/portfolioOwner";
 
 const AdminProfile = () => {
   const [profile, setProfile] = useState<any>(null);
@@ -50,15 +58,23 @@ const AdminProfile = () => {
     }
 
     if (p) {
-      setProfile(p);
+      setProfile({
+        ...p,
+        name: normalizePortfolioOwnerName(p.name),
+        brand_name: normalizePortfolioOwnerName(p.brand_name),
+        brand_initials: normalizePortfolioOwnerInitials(p.brand_initials),
+        site_title: normalizePortfolioSiteTitle(p.site_title),
+        photo_url: PORTFOLIO_OWNER_PHOTO,
+      });
     } else {
       const { data: createdProfile, error: createError } = await supabase
         .from("profile")
         .insert({
-          name: "Hafiz Muhammad Hassan Mustafa",
-          brand_name: "Hafiz Muhammad Hassan Mustafa",
-          brand_initials: "HMHM",
-          site_title: "Hafiz Muhammad Hassan Mustafa | AI Engineer",
+          name: PORTFOLIO_OWNER_NAME,
+          brand_name: PORTFOLIO_OWNER_NAME,
+          brand_initials: PORTFOLIO_OWNER_INITIALS,
+          site_title: `${PORTFOLIO_OWNER_NAME} | AI Engineer`,
+          photo_url: PORTFOLIO_OWNER_PHOTO,
           tagline: "AI Engineer · ML Researcher · Full-Stack AI Systems",
         })
         .select("*")

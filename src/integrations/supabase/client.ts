@@ -2,8 +2,15 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const configuredSupabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
+const configuredSupabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.trim();
+
+export const isSupabaseConfigured = Boolean(configuredSupabaseUrl && configuredSupabaseKey);
+
+// Keep the public portfolio usable during local development even when the
+// optional Supabase environment variables have not been configured yet.
+const SUPABASE_URL = configuredSupabaseUrl || "http://127.0.0.1:54321";
+const SUPABASE_PUBLISHABLE_KEY = configuredSupabaseKey || "local-development-placeholder-key";
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";

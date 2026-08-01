@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { Session, User } from "@supabase/supabase-js";
-import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
 
 interface AuthContextType {
   session: Session | null;
@@ -20,6 +20,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const isLocalhost = typeof window !== "undefined" && ["localhost", "127.0.0.1"].includes(window.location.hostname);
 
   useEffect(() => {
+    if (!isSupabaseConfigured) {
+      setLoading(false);
+      return;
+    }
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
@@ -44,6 +49,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signIn = async (email: string, password: string, captchaAnswer?: string) => {
+    if (!isSupabaseConfigured) {
+      return { error: new Error("Supabase is not configured for local admin access") };
+    }
+
     try {
       const response = await fetch("/api/admin-login", {
         method: "POST",
@@ -96,6 +105,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signUp = async (email: string, password: string, adminSecret: string) => {
+    if (!isSupabaseConfigured) {
+      return { error: new Error("Supabase is not configured for local admin access") };
+    }
+
     try {
       // For localhost, bypass API and sign up directly if admin secret is correct
       if (isLocalhost) {
@@ -145,6 +158,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signOut = async () => {
+    if (!isSupabaseConfigured) return;
     await supabase.auth.signOut();
   };
 
