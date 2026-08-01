@@ -98,7 +98,7 @@ const StatCard = ({ value, label }: { value: string; label: string }) => {
 };
 
 const HeroSection = () => {
-  const { profile, heroStats, typewriterLines, loading } = usePortfolio();
+  const { profile, heroStats, typewriterLines, loading, isSectionVisible } = usePortfolio();
 
   const visibleStats = heroStats.filter((stat) => stat.is_visible !== false);
 
@@ -183,16 +183,18 @@ const HeroSection = () => {
         </div>
 
         {/* Stats row */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 2.7 }}
-          className="mt-16 grid grid-cols-2 lg:grid-cols-4 gap-4"
-        >
-          {visibleStats.map((s) => (
-            <StatCard key={s.id} value={s.value} label={s.label} />
-          ))}
-        </motion.div>
+        {isSectionVisible("hero_stats") && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 2.7 }}
+            className="mt-16 grid grid-cols-2 lg:grid-cols-4 gap-4"
+          >
+            {visibleStats.map((stat) => (
+              <StatCard key={stat.id} value={stat.value} label={stat.label} />
+            ))}
+          </motion.div>
+        )}
       </div>
     </section>
   );

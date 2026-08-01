@@ -19,5 +19,8 @@ describe("local portfolio fallback", () => {
     expect(result.current.typewriterLines).toHaveLength(2);
     expect(result.current.engineeringServices).toHaveLength(8);
     expect(result.current.blogPosts).toEqual([]);
+    expect(result.current.sectionVisibility).toHaveLength(10);
+    expect(result.current.isSectionVisible("services")).toBe(true);
+    expect(result.current.isSectionVisible("skills")).toBe(true);
   });
 });

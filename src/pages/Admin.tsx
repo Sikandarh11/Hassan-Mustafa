@@ -13,18 +13,20 @@ import AdminCertificates from "@/components/admin/AdminCertificates";
 import AdminSkills from "@/components/admin/AdminSkills";
 import AdminBlog from "@/components/admin/AdminBlog";
 import AdminEngineeringServices from "@/components/admin/AdminEngineeringServices";
+import AdminSectionVisibilityToggle from "@/components/admin/AdminSectionVisibilityToggle";
+import type { SectionKey } from "@/lib/sectionVisibility";
 
-const tabs = [
-  { id: "profile", label: "Profile & Hero", icon: User },
-  { id: "stats", label: "Hero Stats", icon: BarChart3 },
-  { id: "services", label: "Services", icon: Cog },
-  { id: "experience", label: "Experience", icon: Briefcase },
-  { id: "projects", label: "Projects", icon: FolderKanban },
-  { id: "blog", label: "Blog", icon: BookOpen },
-  { id: "research", label: "Research", icon: FlaskConical },
-  { id: "team", label: "Team", icon: Users },
-  { id: "certificates", label: "Certificates", icon: Award },
-  { id: "skills", label: "Skills", icon: Wrench },
+const tabs: Array<{ id: string; label: string; icon: typeof User; sectionKey: SectionKey }> = [
+  { id: "profile", label: "Profile & Hero", icon: User, sectionKey: "profile" },
+  { id: "stats", label: "Hero Stats", icon: BarChart3, sectionKey: "hero_stats" },
+  { id: "services", label: "Services", icon: Cog, sectionKey: "services" },
+  { id: "experience", label: "Experience", icon: Briefcase, sectionKey: "experience" },
+  { id: "projects", label: "Projects", icon: FolderKanban, sectionKey: "projects" },
+  { id: "blog", label: "Blog", icon: BookOpen, sectionKey: "blog" },
+  { id: "research", label: "Research", icon: FlaskConical, sectionKey: "research" },
+  { id: "team", label: "Team", icon: Users, sectionKey: "team" },
+  { id: "certificates", label: "Certificates", icon: Award, sectionKey: "certificates" },
+  { id: "skills", label: "Skills", icon: Wrench, sectionKey: "skills" },
 ];
 
 const INACTIVITY_TIMEOUT_MS = 600_000;
@@ -90,6 +92,8 @@ const Admin = () => {
     }
   };
 
+  const activeTabConfig = tabs.find((tab) => tab.id === activeTab) ?? tabs[0];
+
   return (
     <div className="min-h-screen bg-background">
       {/* Top bar */}
@@ -126,7 +130,13 @@ const Admin = () => {
 
         {/* Main content */}
         <div className="ml-56 flex-1 p-6 min-h-[calc(100vh-3.5rem)]">
-          {renderTab()}
+          <div className="space-y-6">
+            <AdminSectionVisibilityToggle
+              sectionKey={activeTabConfig.sectionKey}
+              sectionLabel={activeTabConfig.label}
+            />
+            {renderTab()}
+          </div>
         </div>
       </div>
     </div>

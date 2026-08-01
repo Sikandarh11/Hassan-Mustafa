@@ -11,6 +11,11 @@ import {
   PORTFOLIO_OWNER_PHOTO,
 } from "@/lib/portfolioOwner";
 import { MECHANICAL_SERVICE_PRESETS } from "@/lib/mechanicalServicePresets";
+import {
+  getSectionVisibilityDefault,
+  SECTION_VISIBILITY_DEFAULTS,
+  type SectionKey,
+} from "@/lib/sectionVisibility";
 
 type Profile = Tables<"profile">;
 type HeroStat = Tables<"hero_stats">;
@@ -23,6 +28,7 @@ type Research = Tables<"research">;
 type TeamMember = Tables<"team_members">;
 type Certificate = Tables<"certificates">;
 type Skill = Tables<"skills">;
+type SectionVisibility = Tables<"section_visibility">;
 
 const FALLBACK_PROFILE: Profile = {
   id: "local-fallback-profile",
@@ -72,6 +78,17 @@ const FALLBACK_ENGINEERING_SERVICES: EngineeringService[] = MECHANICAL_SERVICE_P
   }),
 );
 
+const FALLBACK_SECTION_VISIBILITY: SectionVisibility[] = SECTION_VISIBILITY_DEFAULTS.map(
+  (section) => ({
+    section_key: section.key,
+    label: section.label,
+    is_visible: section.isVisible,
+    sort_order: section.sortOrder,
+    created_at: "",
+    updated_at: "",
+  }),
+);
+
 const normalizeProfile = (profile: Profile): Profile => ({
   ...profile,
   accent_color: normalizePortfolioAccentColor(profile.accent_color),
@@ -95,6 +112,7 @@ const REALTIME_TABLES = [
   "team_members",
   "certificates",
   "skills",
+  "section_visibility",
 ] as const;
 
 type TableName = (typeof REALTIME_TABLES)[number];
@@ -111,6 +129,7 @@ export function usePortfolioData() {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [skills, setSkills] = useState<Skill[]>([]);
+  const [sectionVisibility, setSectionVisibility] = useState<SectionVisibility[]>(FALLBACK_SECTION_VISIBILITY);
   const [loading, setLoading] = useState(true);
 
   // Refetch a single table and update state
@@ -171,6 +190,11 @@ export function usePortfolioData() {
         if (data) setSkills(data);
         break;
       }
+      case "section_visibility": {
+        const { data } = await supabase.from("section_visibility").select("*").order("sort_order");
+        if (data?.length) setSectionVisibility(data);
+        break;
+      }
     }
   }, []);
 
@@ -182,7 +206,7 @@ export function usePortfolioData() {
 
     // Initial load
     const load = async () => {
-      const [p, hs, tl, bp, es, ex, pr, re, tm, ce, sk] = await Promise.all([
+      const [p, hs, tl, bp, es, ex, pr, re, tm, ce, sk, sv] = await Promise.all([
         supabase.from("profile").select("*").limit(1).single(),
         supabase.from("hero_stats").select("*").order("sort_order"),
         supabase.from("typewriter_lines").select("*").order("sort_order"),
@@ -194,6 +218,7 @@ export function usePortfolioData() {
         supabase.from("team_members").select("*").order("sort_order"),
         supabase.from("certificates").select("*").order("sort_order"),
         supabase.from("skills").select("*").order("sort_order"),
+        supabase.from("section_visibility").select("*").order("sort_order"),
       ]);
       if (p.data) setProfile(normalizeProfile(p.data));
       if (hs.data) setHeroStats(hs.data);
@@ -206,6 +231,7 @@ export function usePortfolioData() {
       if (tm.data) setTeamMembers(tm.data);
       if (ce.data) setCertificates(ce.data);
       if (sk.data) setSkills(sk.data);
+      if (sv.data?.length) setSectionVisibility(sv.data);
       setLoading(false);
     };
     load();
@@ -268,12 +294,21 @@ export function usePortfolioData() {
         { event: "*", schema: "public", table: "skills" },
         () => refetchTable("skills")
       )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "section_visibility" },
+        () => refetchTable("section_visibility")
+      )
       .subscribe();
 
     return () => {
       supabase.removeChannel(channel);
     };
   }, [refetchTable]);
+
+  const isSectionVisible = (sectionKey: SectionKey) =>
+    sectionVisibility.find((section) => section.section_key === sectionKey)?.is_visible
+      ?? getSectionVisibilityDefault(sectionKey);
 
   return {
     profile,
@@ -287,6 +322,8 @@ export function usePortfolioData() {
     teamMembers,
     certificates,
     skills,
+    sectionVisibility,
+    isSectionVisible,
     loading,
   };
 }

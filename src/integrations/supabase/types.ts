@@ -410,6 +410,33 @@ export type Database = {
         }
         Relationships: []
       }
+      section_visibility: {
+        Row: {
+          created_at: string
+          is_visible: boolean
+          label: string
+          section_key: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          is_visible?: boolean
+          label: string
+          section_key: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          is_visible?: boolean
+          label?: string
+          section_key?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       skills: {
         Row: {
           category: string

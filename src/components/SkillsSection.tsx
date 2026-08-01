@@ -19,11 +19,13 @@ const SkillsSection = () => {
 
   // Sort categories for consistent display
   const categoryOrder = [
-    "Languages",
-    "Frameworks",
-    "AI/ML",
-    "Cloud & DevOps",
-    "Databases",
+    "Mechanical Design",
+    "CAD & Drafting",
+    "Simulation & Analysis",
+    "Manufacturing",
+    "Engineering Standards",
+    "Product Development",
+    "Technical Skills",
     "Tools",
     "Other",
   ];
@@ -39,7 +41,7 @@ const SkillsSection = () => {
   return (
     <section id="skills" className="py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading label="Technologies" title="Skills" />
+        <SectionHeading label="Engineering Toolkit" title="Skills" />
 
         <div className="space-y-12">
           {sortedCategories.map((category, catIndex) => (
@@ -63,7 +65,7 @@ const SkillsSection = () => {
                       viewport={{ once: true }}
                       className="group card-surface p-4 flex flex-col items-center gap-2 hover:border-primary/50 transition-all"
                     >
-                      <SkillIcon name={skill.name} logoUrl={(skill as any).logo_url} />
+                      <SkillIcon name={skill.name} />
                       <span className="text-xs font-mono text-muted-foreground group-hover:text-foreground transition-colors text-center">
                         {skill.name}
                       </span>

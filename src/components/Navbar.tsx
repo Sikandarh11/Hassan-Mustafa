@@ -2,22 +2,26 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { usePortfolio } from "@/hooks/usePortfolio";
+import type { SectionKey } from "@/lib/sectionVisibility";
 
-const navLinks = [
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Experience", href: "#experience" },
-  { label: "Projects", href: "#projects" },
-  { label: "Research", href: "#research" },
-  { label: "Certifications", href: "#certifications" },
-  { label: "Blog", href: "#blog" },
+const navLinks: Array<{ label: string; href: string; sectionKey?: SectionKey }> = [
+  { label: "About", href: "#about", sectionKey: "profile" },
+  { label: "Services", href: "#services", sectionKey: "services" },
+  { label: "Experience", href: "#experience", sectionKey: "experience" },
+  { label: "Projects", href: "#projects", sectionKey: "projects" },
+  { label: "Research", href: "#research", sectionKey: "research" },
+  { label: "Certifications", href: "#certifications", sectionKey: "certificates" },
+  { label: "Blog", href: "#blog", sectionKey: "blog" },
   { label: "Contact", href: "#contact" },
 ];
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { profile } = usePortfolio();
+  const { profile, isSectionVisible } = usePortfolio();
+  const visibleNavLinks = navLinks.filter(
+    (link) => !link.sectionKey || isSectionVisible(link.sectionKey),
+  );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -65,7 +69,7 @@ const Navbar = () => {
         </a>
 
         <div className="hidden lg:flex items-center gap-4">
-          {navLinks.map((l) => (
+          {visibleNavLinks.map((l) => (
             <a
               key={l.label}
               href={l.href}
@@ -100,7 +104,7 @@ const Navbar = () => {
             exit={{ opacity: 0, height: 0 }}
             className="lg:hidden bg-background/95 backdrop-blur-md border-b border-border/50 px-4 pb-4 overflow-hidden"
           >
-            {navLinks.map((l) => (
+            {visibleNavLinks.map((l) => (
               <a
                 key={l.label}
                 href={l.href}
