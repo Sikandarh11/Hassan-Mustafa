@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Navigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Cloud, LogOut, User, BarChart3, Briefcase, FlaskConical, FolderKanban, Users, Award, Wrench, Mail, Link2 } from "lucide-react";
+import { Cloud, LogOut, User, BarChart3, Briefcase, FlaskConical, FolderKanban, Users, Award, Wrench, BookOpen, Cog } from "lucide-react";
 import AdminProfile from "@/components/admin/AdminProfile";
 import AdminHeroStats from "@/components/admin/AdminHeroStats";
 import AdminExperience from "@/components/admin/AdminExperience";
@@ -11,12 +11,16 @@ import AdminResearch from "@/components/admin/AdminResearch";
 import AdminTeam from "@/components/admin/AdminTeam";
 import AdminCertificates from "@/components/admin/AdminCertificates";
 import AdminSkills from "@/components/admin/AdminSkills";
+import AdminBlog from "@/components/admin/AdminBlog";
+import AdminEngineeringServices from "@/components/admin/AdminEngineeringServices";
 
 const tabs = [
   { id: "profile", label: "Profile & Hero", icon: User },
   { id: "stats", label: "Hero Stats", icon: BarChart3 },
+  { id: "services", label: "Services", icon: Cog },
   { id: "experience", label: "Experience", icon: Briefcase },
   { id: "projects", label: "Projects", icon: FolderKanban },
+  { id: "blog", label: "Blog", icon: BookOpen },
   { id: "research", label: "Research", icon: FlaskConical },
   { id: "team", label: "Team", icon: Users },
   { id: "certificates", label: "Certificates", icon: Award },
@@ -74,8 +78,10 @@ const Admin = () => {
     switch (activeTab) {
       case "profile": return <AdminProfile />;
       case "stats": return <AdminHeroStats />;
+      case "services": return <AdminEngineeringServices />;
       case "experience": return <AdminExperience />;
       case "projects": return <AdminProjects />;
+      case "blog": return <AdminBlog />;
       case "research": return <AdminResearch />;
       case "team": return <AdminTeam />;
       case "certificates": return <AdminCertificates />;

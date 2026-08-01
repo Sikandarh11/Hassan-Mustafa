@@ -1,5 +1,11 @@
 import { renderHook, waitFor } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+vi.mock("@/integrations/supabase/client", () => ({
+  isSupabaseConfigured: false,
+  supabase: {},
+}));
+
 import { usePortfolioData } from "@/hooks/usePortfolioData";
 
 describe("local portfolio fallback", () => {
@@ -11,5 +17,7 @@ describe("local portfolio fallback", () => {
     expect(result.current.profile?.photo_url).toBe("/hassan-mustafa.jpg");
     expect(result.current.heroStats).toHaveLength(4);
     expect(result.current.typewriterLines).toHaveLength(2);
+    expect(result.current.engineeringServices).toHaveLength(8);
+    expect(result.current.blogPosts).toEqual([]);
   });
 });

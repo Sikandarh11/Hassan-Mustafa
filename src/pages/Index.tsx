@@ -5,12 +5,14 @@ import Navbar from "@/components/Navbar";
 
 const HeroSection = lazy(() => import("@/components/HeroSection"));
 const AboutSection = lazy(() => import("@/components/AboutSection"));
+const EngineeringServicesSection = lazy(() => import("@/components/EngineeringServicesSection"));
 // const SkillsSection = lazy(() => import("@/components/SkillsSection"));
 const ExperienceSection = lazy(() => import("@/components/ExperienceSection"));
 const ResearchSection = lazy(() => import("@/components/ResearchSection"));
 const ProjectsSection = lazy(() => import("@/components/ProjectsSection"));
 const TeamSection = lazy(() => import("@/components/TeamSection"));
 const CertificatesSection = lazy(() => import("@/components/CertificatesSection"));
+const BlogSection = lazy(() => import("@/components/BlogSection"));
 const ContactSection = lazy(() => import("@/components/ContactSection"));
 const Footer = lazy(() => import("@/components/Footer"));
 const WhatsAppButton = lazy(() => import("@/components/WhatsAppButton"));
@@ -28,12 +30,14 @@ const Index = () => {
         <main>
           <Suspense fallback={<SectionFallback />}><HeroSection /></Suspense>
           <Suspense fallback={<SectionFallback />}><AboutSection /></Suspense>
+          <Suspense fallback={<SectionFallback />}><EngineeringServicesSection /></Suspense>
           {/* <Suspense fallback={<SectionFallback />}><SkillsSection /></Suspense> */}
           <Suspense fallback={<SectionFallback />}><ExperienceSection /></Suspense>
           <Suspense fallback={<SectionFallback />}><ProjectsSection /></Suspense>
           <Suspense fallback={<SectionFallback />}><ResearchSection /></Suspense>
           <Suspense fallback={<SectionFallback />}><TeamSection /></Suspense>
           <Suspense fallback={<SectionFallback />}><CertificatesSection /></Suspense>
+          <Suspense fallback={<SectionFallback />}><BlogSection /></Suspense>
           <Suspense fallback={<SectionFallback />}><ContactSection /></Suspense>
         </main>
         <Suspense fallback={null}><Footer /></Suspense>

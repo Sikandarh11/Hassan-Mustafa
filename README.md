@@ -4,8 +4,8 @@ Personal portfolio web app built with React, TypeScript, Vite, Tailwind, shadcn/
 
 ## Features
 
-- Public portfolio sections: Hero, About, Skills, Experience, Projects, Research, Team, Certificates, Contact
-- Admin dashboard for managing content
+- Public portfolio sections: Hero, About, Engineering Services, Experience, Projects, Research, Team, Certificates, Blog, Contact
+- Admin dashboard for managing content, including dynamic Blog and Services editors
 - Supabase Auth for admin login
 - Supabase database-backed content with real-time updates
 - Responsive design and animated UI
@@ -37,6 +37,12 @@ Personal portfolio web app built with React, TypeScript, Vite, Tailwind, shadcn/
 Commands:
 
 npm install
+
+4. Apply the Supabase migrations to the connected project
+
+Commands:
+
+npx supabase db push
 
 ## Environment Variables
 

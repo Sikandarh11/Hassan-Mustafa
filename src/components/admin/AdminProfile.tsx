@@ -1,22 +1,28 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import type { Tables } from "@/integrations/supabase/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Save, Upload, Plus, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
+  normalizePortfolioAccentColor,
   normalizePortfolioOwnerInitials,
   normalizePortfolioOwnerName,
   normalizePortfolioSiteTitle,
+  PORTFOLIO_BRAND_COLOR,
   PORTFOLIO_OWNER_INITIALS,
   PORTFOLIO_OWNER_NAME,
   PORTFOLIO_OWNER_PHOTO,
 } from "@/lib/portfolioOwner";
 
+type Profile = Tables<"profile">;
+type TypewriterLine = Tables<"typewriter_lines">;
+
 const AdminProfile = () => {
-  const [profile, setProfile] = useState<any>(null);
-  const [lines, setLines] = useState<any[]>([]);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [lines, setLines] = useState<TypewriterLine[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -60,6 +66,7 @@ const AdminProfile = () => {
     if (p) {
       setProfile({
         ...p,
+        accent_color: normalizePortfolioAccentColor(p.accent_color),
         name: normalizePortfolioOwnerName(p.name),
         brand_name: normalizePortfolioOwnerName(p.brand_name),
         brand_initials: normalizePortfolioOwnerInitials(p.brand_initials),
@@ -73,9 +80,10 @@ const AdminProfile = () => {
           name: PORTFOLIO_OWNER_NAME,
           brand_name: PORTFOLIO_OWNER_NAME,
           brand_initials: PORTFOLIO_OWNER_INITIALS,
-          site_title: `${PORTFOLIO_OWNER_NAME} | AI Engineer`,
+          accent_color: PORTFOLIO_BRAND_COLOR,
+          site_title: `${PORTFOLIO_OWNER_NAME} | Mechanical Design Engineer`,
           photo_url: PORTFOLIO_OWNER_PHOTO,
-          tagline: "AI Engineer · ML Researcher · Full-Stack AI Systems",
+          tagline: "Mechanical Design Engineer · CAD · FEA · DFM",
         })
         .select("*")
         .single();
@@ -102,12 +110,12 @@ const AdminProfile = () => {
     setSaving(false);
   };
 
-  const uploadFile = async (field: string, file: File) => {
+  const uploadFile = async (field: "photo_url" | "resume_url", file: File) => {
     const path = `${field}/${Date.now()}-${file.name}`;
     const { data, error } = await supabase.storage.from("portfolio").upload(path, file);
     if (error) { toast({ title: "Upload failed", description: error.message, variant: "destructive" }); return; }
     const { data: { publicUrl } } = supabase.storage.from("portfolio").getPublicUrl(data.path);
-    setProfile((p: any) => p ? { ...p, [field]: publicUrl } : p);
+    setProfile((currentProfile) => currentProfile ? { ...currentProfile, [field]: publicUrl } : currentProfile);
   };
 
   const addLine = async () => {
@@ -145,7 +153,7 @@ const AdminProfile = () => {
     );
   }
 
-  const field = (label: string, key: string, placeholder = "", type = "text") => (
+  const field = (label: string, key: keyof Profile, placeholder = "", type = "text") => (
     <div key={key}>
       <label className="text-xs text-muted-foreground font-mono uppercase tracking-wider">{label}</label>
       <Input
@@ -168,7 +176,7 @@ const AdminProfile = () => {
       <div className="card-surface p-6 space-y-4">
         <h3 className="text-sm font-semibold text-foreground">Basic Info</h3>
         {field("Name", "name", "Full name")}
-        {field("Tagline", "tagline", "e.g. AI Engineer · ML Researcher")}
+        {field("Tagline", "tagline", "e.g. Mechanical Design Engineer · CAD · FEA")}
         <div>
           <label className="text-xs text-muted-foreground font-mono uppercase tracking-wider">About Text</label>
           <Textarea value={profile.about_text || ""} onChange={(e) => setProfile({ ...profile, about_text: e.target.value })} className="mt-1" rows={4} placeholder="Tell about yourself (optional)" />
@@ -180,7 +188,7 @@ const AdminProfile = () => {
         <div className="grid grid-cols-2 gap-4">
           {field("Brand Name", "brand_name", "e.g. Hafiz Muhammad Hassan Mustafa")}
           {field("Brand Initials", "brand_initials", "e.g. HMHM")}
-          {field("Accent Color (hex)", "accent_color", "#00d4d8")}
+          {field("Accent Color (hex)", "accent_color", PORTFOLIO_BRAND_COLOR)}
           {field("Site Title", "site_title", "Page title for SEO")}
         </div>
         {field("Meta Description", "meta_description", "SEO description")}

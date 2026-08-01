@@ -100,17 +100,17 @@ const StatCard = ({ value, label }: { value: string; label: string }) => {
 const HeroSection = () => {
   const { profile, heroStats, typewriterLines, loading } = usePortfolio();
 
-  const visibleStats = heroStats.filter((s) => (s as any).is_visible !== false);
+  const visibleStats = heroStats.filter((stat) => stat.is_visible !== false);
 
   const sequence =
     typewriterLines.length > 0
       ? typewriterLines.flatMap((l) => [l.text, 2000])
-      : ["Building Production AI Systems", 2000, "LLM & Agentic Workflows", 2000];
+      : ["Designing Production-Ready Mechanical Systems", 2000, "CAD · GD&T · FEA · DFM", 2000];
 
   return (
     <section className="relative min-h-screen flex items-center pt-16 overflow-hidden hex-grid-bg">
       <ParticleCanvas />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(180_100%_42%/0.08),transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.08),transparent_60%)]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full relative">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -121,7 +121,7 @@ const HeroSection = () => {
               transition={{ duration: 0.5, delay: 2.1 }}
               className="label-text mb-4 text-primary tracking-[0.05em]"
             >
-              {profile?.tagline || "AI Engineer · ML Researcher"}
+              {profile?.tagline || "Mechanical Design Engineer"}
             </motion.p>
             <motion.h1
               {...fadeUp}

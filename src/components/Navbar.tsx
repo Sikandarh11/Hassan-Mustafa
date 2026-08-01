@@ -5,11 +5,12 @@ import { usePortfolio } from "@/hooks/usePortfolio";
 
 const navLinks = [
   { label: "About", href: "#about" },
+  { label: "Services", href: "#services" },
   { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
   { label: "Research", href: "#research" },
-  { label: "Team", href: "#team" },
   { label: "Certifications", href: "#certifications" },
+  { label: "Blog", href: "#blog" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -26,7 +27,7 @@ const Navbar = () => {
 
   // Dynamic text from profile with fallbacks
   const brandName = profile?.brand_name || "Hafiz Muhammad Hassan Mustafa";
-  const tagline = profile?.tagline || "AI & Machine Learning Engineer";
+  const tagline = profile?.tagline || "Mechanical Design Engineer";
 
   return (
     <motion.nav
@@ -63,12 +64,12 @@ const Navbar = () => {
           </span>
         </a>
 
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden lg:flex items-center gap-4">
           {navLinks.map((l) => (
             <a
               key={l.label}
               href={l.href}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors font-body"
+              className="text-xs xl:text-sm text-muted-foreground hover:text-foreground transition-colors font-body"
             >
               {l.label}
             </a>
@@ -82,7 +83,7 @@ const Navbar = () => {
         </div>
 
         <button
-          className="md:hidden text-foreground p-2"
+          className="lg:hidden text-foreground p-2"
           onClick={() => setOpen(!open)}
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
@@ -97,7 +98,7 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-background/95 backdrop-blur-md border-b border-border/50 px-4 pb-4 overflow-hidden"
+            className="lg:hidden bg-background/95 backdrop-blur-md border-b border-border/50 px-4 pb-4 overflow-hidden"
           >
             {navLinks.map((l) => (
               <a

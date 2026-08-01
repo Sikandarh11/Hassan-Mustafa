@@ -12,7 +12,7 @@ $$ LANGUAGE plpgsql SET search_path = public;
 CREATE TABLE public.profile (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL DEFAULT 'Hafiz Muhammad Hassan Mustafa',
-  tagline TEXT DEFAULT 'AI Engineer · ML Researcher · Full-Stack AI Systems',
+  tagline TEXT DEFAULT 'Mechanical Design Engineer · CAD · FEA · DFM',
   about_text TEXT,
   photo_url TEXT DEFAULT '/hassan-mustafa.jpg',
   resume_url TEXT,

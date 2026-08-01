@@ -3,15 +3,20 @@ import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 import type { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 import {
+  normalizePortfolioAccentColor,
   normalizePortfolioOwnerInitials,
   normalizePortfolioOwnerName,
   normalizePortfolioSiteTitle,
+  PORTFOLIO_BRAND_COLOR,
   PORTFOLIO_OWNER_PHOTO,
 } from "@/lib/portfolioOwner";
+import { MECHANICAL_SERVICE_PRESETS } from "@/lib/mechanicalServicePresets";
 
 type Profile = Tables<"profile">;
 type HeroStat = Tables<"hero_stats">;
 type TypewriterLine = Tables<"typewriter_lines">;
+type BlogPost = Tables<"blog_posts">;
+type EngineeringService = Tables<"engineering_services">;
 type Experience = Tables<"experiences">;
 type Project = Tables<"projects">;
 type Research = Tables<"research">;
@@ -24,11 +29,11 @@ const FALLBACK_PROFILE: Profile = {
   name: "Hafiz Muhammad Hassan Mustafa",
   brand_name: "Hafiz Muhammad Hassan Mustafa",
   brand_initials: "HMHM",
-  tagline: "AI & Machine Learning Engineer",
-  about_text: "I build intelligent, production-ready systems that connect machine learning research with practical software engineering.",
-  accent_color: "#00d4d8",
-  site_title: "Hafiz Muhammad Hassan Mustafa | AI Engineer",
-  meta_description: "Portfolio of Hafiz Muhammad Hassan Mustafa, AI and Machine Learning Engineer.",
+  tagline: "Mechanical Design Engineer",
+  about_text: "I design practical mechanical systems and production-ready products using parametric CAD, engineering analysis, GD&T, and design-for-manufacturing principles.",
+  accent_color: PORTFOLIO_BRAND_COLOR,
+  site_title: "Hafiz Muhammad Hassan Mustafa | Mechanical Design Engineer",
+  meta_description: "Portfolio of Hafiz Muhammad Hassan Mustafa, Mechanical Design Engineer.",
   photo_url: PORTFOLIO_OWNER_PHOTO,
   resume_url: null,
   phone: null,
@@ -42,19 +47,34 @@ const FALLBACK_PROFILE: Profile = {
 };
 
 const FALLBACK_HERO_STATS: HeroStat[] = [
-  { id: "local-stat-1", value: "AI", label: "Machine Learning", icon_type: "check", is_visible: true, sort_order: 0, created_at: "", updated_at: "" },
-  { id: "local-stat-2", value: "ML", label: "Intelligent Systems", icon_type: "check", is_visible: true, sort_order: 1, created_at: "", updated_at: "" },
-  { id: "local-stat-3", value: "24/7", label: "Always Learning", icon_type: "check", is_visible: true, sort_order: 2, created_at: "", updated_at: "" },
-  { id: "local-stat-4", value: "100%", label: "Engineering Focus", icon_type: "check", is_visible: true, sort_order: 3, created_at: "", updated_at: "" },
+  { id: "local-stat-1", value: "8+", label: "Engineering Services", icon_type: "check", is_visible: true, sort_order: 0, created_at: "", updated_at: "" },
+  { id: "local-stat-2", value: "3D", label: "CAD & Assemblies", icon_type: "check", is_visible: true, sort_order: 1, created_at: "", updated_at: "" },
+  { id: "local-stat-3", value: "GD&T", label: "Drawings & Tolerances", icon_type: "check", is_visible: true, sort_order: 2, created_at: "", updated_at: "" },
+  { id: "local-stat-4", value: "FEA", label: "Design Validation", icon_type: "check", is_visible: true, sort_order: 3, created_at: "", updated_at: "" },
 ];
 
 const FALLBACK_TYPEWRITER_LINES: TypewriterLine[] = [
-  { id: "local-line-1", text: "Building Production AI Systems", sort_order: 0, created_at: "" },
-  { id: "local-line-2", text: "Designing Intelligent Automation", sort_order: 1, created_at: "" },
+  { id: "local-line-1", text: "Designing Production-Ready Mechanical Systems", sort_order: 0, created_at: "" },
+  { id: "local-line-2", text: "CAD · GD&T · FEA · DFM", sort_order: 1, created_at: "" },
 ];
+
+const FALLBACK_ENGINEERING_SERVICES: EngineeringService[] = MECHANICAL_SERVICE_PRESETS.map(
+  ({ key, standards = [], cta_label = "Discuss this service", cta_url = "#contact", ...preset }, sortOrder) => ({
+    ...preset,
+    id: `local-service-${key}`,
+    standards,
+    cta_label,
+    cta_url,
+    is_visible: true,
+    sort_order: sortOrder,
+    created_at: "",
+    updated_at: "",
+  }),
+);
 
 const normalizeProfile = (profile: Profile): Profile => ({
   ...profile,
+  accent_color: normalizePortfolioAccentColor(profile.accent_color),
   name: normalizePortfolioOwnerName(profile.name),
   brand_name: normalizePortfolioOwnerName(profile.brand_name),
   brand_initials: normalizePortfolioOwnerInitials(profile.brand_initials),
@@ -67,6 +87,8 @@ const REALTIME_TABLES = [
   "profile",
   "hero_stats",
   "typewriter_lines",
+  "blog_posts",
+  "engineering_services",
   "experiences",
   "projects",
   "research",
@@ -81,6 +103,8 @@ export function usePortfolioData() {
   const [profile, setProfile] = useState<Profile | null>(FALLBACK_PROFILE);
   const [heroStats, setHeroStats] = useState<HeroStat[]>(FALLBACK_HERO_STATS);
   const [typewriterLines, setTypewriterLines] = useState<TypewriterLine[]>(FALLBACK_TYPEWRITER_LINES);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [engineeringServices, setEngineeringServices] = useState<EngineeringService[]>(FALLBACK_ENGINEERING_SERVICES);
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [research, setResearch] = useState<Research[]>([]);
@@ -105,6 +129,16 @@ export function usePortfolioData() {
       case "typewriter_lines": {
         const { data } = await supabase.from("typewriter_lines").select("*").order("sort_order");
         if (data) setTypewriterLines(data);
+        break;
+      }
+      case "blog_posts": {
+        const { data } = await supabase.from("blog_posts").select("*").order("sort_order");
+        if (data) setBlogPosts(data);
+        break;
+      }
+      case "engineering_services": {
+        const { data } = await supabase.from("engineering_services").select("*").order("sort_order");
+        if (data) setEngineeringServices(data);
         break;
       }
       case "experiences": {
@@ -148,10 +182,12 @@ export function usePortfolioData() {
 
     // Initial load
     const load = async () => {
-      const [p, hs, tl, ex, pr, re, tm, ce, sk] = await Promise.all([
+      const [p, hs, tl, bp, es, ex, pr, re, tm, ce, sk] = await Promise.all([
         supabase.from("profile").select("*").limit(1).single(),
         supabase.from("hero_stats").select("*").order("sort_order"),
         supabase.from("typewriter_lines").select("*").order("sort_order"),
+        supabase.from("blog_posts").select("*").order("sort_order"),
+        supabase.from("engineering_services").select("*").order("sort_order"),
         supabase.from("experiences").select("*").order("sort_order"),
         supabase.from("projects").select("*").order("sort_order"),
         supabase.from("research").select("*").order("sort_order"),
@@ -162,6 +198,8 @@ export function usePortfolioData() {
       if (p.data) setProfile(normalizeProfile(p.data));
       if (hs.data) setHeroStats(hs.data);
       if (tl.data) setTypewriterLines(tl.data);
+      if (bp.data) setBlogPosts(bp.data);
+      if (es.data) setEngineeringServices(es.data);
       if (ex.data) setExperiences(ex.data);
       if (pr.data) setProjects(pr.data);
       if (re.data) setResearch(re.data);
@@ -189,6 +227,16 @@ export function usePortfolioData() {
         "postgres_changes",
         { event: "*", schema: "public", table: "typewriter_lines" },
         () => refetchTable("typewriter_lines")
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "blog_posts" },
+        () => refetchTable("blog_posts")
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "engineering_services" },
+        () => refetchTable("engineering_services")
       )
       .on(
         "postgres_changes",
@@ -227,5 +275,18 @@ export function usePortfolioData() {
     };
   }, [refetchTable]);
 
-  return { profile, heroStats, typewriterLines, experiences, projects, research, teamMembers, certificates, skills, loading };
+  return {
+    profile,
+    heroStats,
+    typewriterLines,
+    blogPosts,
+    engineeringServices,
+    experiences,
+    projects,
+    research,
+    teamMembers,
+    certificates,
+    skills,
+    loading,
+  };
 }

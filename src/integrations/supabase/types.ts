@@ -50,6 +50,141 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_posts: {
+        Row: {
+          category: string
+          content: string | null
+          cover_image_url: string | null
+          created_at: string
+          difficulty: string | null
+          excerpt: string | null
+          external_url: string | null
+          id: string
+          is_featured: boolean | null
+          is_published: boolean | null
+          is_visible: boolean | null
+          post_type: string | null
+          published_at: string | null
+          reading_time_minutes: number | null
+          seo_description: string | null
+          seo_title: string | null
+          slug: string
+          sort_order: number
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          content?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          difficulty?: string | null
+          excerpt?: string | null
+          external_url?: string | null
+          id?: string
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          is_visible?: boolean | null
+          post_type?: string | null
+          published_at?: string | null
+          reading_time_minutes?: number | null
+          seo_description?: string | null
+          seo_title?: string | null
+          slug: string
+          sort_order?: number
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          content?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          difficulty?: string | null
+          excerpt?: string | null
+          external_url?: string | null
+          id?: string
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          is_visible?: boolean | null
+          post_type?: string | null
+          published_at?: string | null
+          reading_time_minutes?: number | null
+          seo_description?: string | null
+          seo_title?: string | null
+          slug?: string
+          sort_order?: number
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      engineering_services: {
+        Row: {
+          capabilities: string[] | null
+          category: string
+          cta_label: string | null
+          cta_url: string | null
+          created_at: string
+          deliverables: string[] | null
+          description: string | null
+          engagement_type: string | null
+          icon: string | null
+          id: string
+          is_featured: boolean | null
+          is_visible: boolean | null
+          sort_order: number
+          standards: string[] | null
+          title: string
+          tools: string[] | null
+          turnaround: string | null
+          updated_at: string
+        }
+        Insert: {
+          capabilities?: string[] | null
+          category?: string
+          cta_label?: string | null
+          cta_url?: string | null
+          created_at?: string
+          deliverables?: string[] | null
+          description?: string | null
+          engagement_type?: string | null
+          icon?: string | null
+          id?: string
+          is_featured?: boolean | null
+          is_visible?: boolean | null
+          sort_order?: number
+          standards?: string[] | null
+          title: string
+          tools?: string[] | null
+          turnaround?: string | null
+          updated_at?: string
+        }
+        Update: {
+          capabilities?: string[] | null
+          category?: string
+          cta_label?: string | null
+          cta_url?: string | null
+          created_at?: string
+          deliverables?: string[] | null
+          description?: string | null
+          engagement_type?: string | null
+          icon?: string | null
+          id?: string
+          is_featured?: boolean | null
+          is_visible?: boolean | null
+          sort_order?: number
+          standards?: string[] | null
+          title?: string
+          tools?: string[] | null
+          turnaround?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       experiences: {
         Row: {
           bullets: string[] | null

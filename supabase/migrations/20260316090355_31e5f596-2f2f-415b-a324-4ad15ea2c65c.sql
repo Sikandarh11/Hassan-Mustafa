@@ -2,9 +2,9 @@
 -- Add new columns to profile
 ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS brand_name text DEFAULT 'Hafiz Muhammad Hassan Mustafa';
 ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS brand_initials text DEFAULT 'HMHM';
-ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS accent_color text DEFAULT '#00d4d8';
-ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS site_title text DEFAULT 'Hafiz Muhammad Hassan Mustafa | AI Engineer';
-ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS meta_description text DEFAULT 'AI Engineer specializing in production-grade LLM systems, agentic workflows, and full-stack AI integration.';
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS accent_color text DEFAULT '#F0AF22';
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS site_title text DEFAULT 'Hafiz Muhammad Hassan Mustafa | Mechanical Design Engineer';
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS meta_description text DEFAULT 'Mechanical Design Engineer specializing in CAD, machine design, GD&T, FEA, DFM, and product development.';
 
 -- Add new columns to projects
 ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS alt_text text;

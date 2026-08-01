@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { PORTFOLIO_BRAND_COLOR } from "@/lib/portfolioOwner";
 
 const ParticleCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -45,7 +46,7 @@ const ParticleCanvas = () => {
       }
 
       // Lines
-      ctx.strokeStyle = "rgba(0,212,216,0.08)";
+      ctx.strokeStyle = `${PORTFOLIO_BRAND_COLOR}14`;
       ctx.lineWidth = 0.5;
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
@@ -64,7 +65,7 @@ const ParticleCanvas = () => {
 
       // Dots
       ctx.globalAlpha = 0.2;
-      ctx.fillStyle = "#00d4d8";
+      ctx.fillStyle = PORTFOLIO_BRAND_COLOR;
       for (const p of particles) {
         ctx.beginPath();
         ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);

@@ -5,7 +5,7 @@ type PortfolioContextType = ReturnType<typeof usePortfolioData>;
 
 const PortfolioContext = createContext<PortfolioContextType | null>(null);
 
-// Converts hex color to HSL format expected by CSS variables (e.g., "180 100% 42%")
+// Converts hex color to the HSL format expected by CSS variables (e.g., "41 87% 54%")
 function hexToHSL(hex: string): string | null {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   if (!result) return null;
