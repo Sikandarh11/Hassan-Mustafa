@@ -47,7 +47,7 @@ const HeroPhoto = ({ src, alt }: { src: string; alt: string }) => {
         </div>
       </div>
       {/* Floating tech badges */}
-      {["Mechanical Design Engineer", "Manufacturing Engineer", "DFX Experienced", "Production Management"].map((tech, i) => (
+      {["Mechanical Design Engg", "Manufacturing Engineer", "DFX Experienced", "Production Management"].map((tech, i) => (
         <span
           key={tech}
           className="absolute text-[10px] font-mono px-2 py-0.5 rounded-full bg-card border border-primary/30 text-primary pointer-events-none"
