@@ -1,10 +1,15 @@
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { useMemo } from "react";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import SectionHeading from "./SectionHeading";
 
 const ExperienceSection = () => {
   const { experiences } = usePortfolio();
+
+  const orderedExperiences = useMemo(
+    () => [...experiences].sort((a, b) => a.sort_order - b.sort_order),
+    [experiences]
+  );
 
   return (
     <section id="experience" className="py-24">
@@ -21,7 +26,7 @@ const ExperienceSection = () => {
             className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-primary/40 origin-top"
           />
 
-          {experiences.map((exp, i) => (
+          {orderedExperiences.map((exp, i) => (
             <motion.div
               key={exp.id}
               initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
@@ -46,9 +51,9 @@ const ExperienceSection = () => {
                       ))}
                     </ul>
                   )}
-                  {(exp as any).link && (
+                  {exp.link && (
                     <a
-                      href={(exp as any).link}
+                      href={exp.link}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-block mt-4 px-3 py-1 text-xs text-primary border border-primary rounded-md bg-transparent hover:bg-primary hover:text-primary-foreground transition-colors duration-200"
